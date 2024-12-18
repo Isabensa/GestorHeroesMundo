@@ -1,92 +1,76 @@
 import axios from 'axios';
 import mongoose from 'mongoose';
-import { connectDB } from './config/dbConfig.mjs'; // Conexión a MongoDB
-import SuperHero from './models/SuperHero.mjs'; // Modelo de Superhéroes
+import { connectDB } from './config/dbConfig.mjs';
+import SuperHero from './models/SuperHero.mjs';
 
-// Configuración de Axios con reintentos
 const axiosInstance = axios.create({
     baseURL: 'https://restcountries.com/v3.1',
-    timeout: 30000, // Timeout extendido
-    headers: {
-        'Accept-Encoding': 'gzip, deflate, br', // Manejo de compresión
-    },
+    timeout: 120000, // Timeout aumentado a 2 minutos
+    headers: { 'Accept-Encoding': 'gzip, deflate, br' },
 });
 
-// Reintentos en caso de errores de conexión
+// Interceptor para manejar reintentos en caso de error
 axiosInstance.interceptors.response.use(null, async (error) => {
     const config = error.config;
-    if (!config || config._retry) {
+
+    // Manejo del contador de reintentos
+    if (!config || config._retryCount >= 5) { // Máximo 5 reintentos
+        console.error("Error: Máximo de reintentos alcanzado.");
         throw error;
     }
-    config._retry = true;
-    console.warn("Reintentando conexión con la API...");
+
+    config._retryCount = (config._retryCount || 0) + 1;
+    console.warn(`Reintento ${config._retryCount}: reconectando a la API...`);
     return axiosInstance(config);
 });
 
-console.log("Iniciando el script para adaptar países como superhéroes...");
-
 /**
- * Mapea los datos de la API externa a la estructura del modelo SuperHero.
- * @param {Array} countries - Lista de países obtenidos de la API externa.
- * @returns {Array} - Lista de datos mapeados a superhéroes.
+ * Mapea los países a la estructura del modelo SuperHero, adaptado para la vista dashboard.
+ * @param {Array} countries - Lista de países desde la API externa.
+ * @returns {Array} - Lista de superhéroes formateados.
  */
 function mapToSuperHeroes(countries) {
-    console.log("Iniciando mapeo de países a superhéroes...");
-    const filteredCountries = countries.filter(country => {
-        const hasSpanish = country.languages && Object.values(country.languages).includes("Spanish");
-        if (hasSpanish) {
-            console.log(`País con español detectado: ${country.name?.common || "Desconocido"}`);
-        }
-        return hasSpanish;
-    });
-
-    console.log(`Total de países con español: ${filteredCountries.length}`);
-
-    const mappedHeroes = filteredCountries.map(country => {
-        return {
-            nombreSuperHeroe: country.name?.common || "Desconocido",
-            nombreReal: country.name?.official || "N/A",
-            edad: Math.floor(Math.random() * 100),
-            planetaOrigen: country.region || "Desconocido",
-            debilidad: "Falta de recursos",
-            poderes: [`Población de ${country.population}`, `Área de ${country.area || 0} km²`],
-            aliados: country.capital || ["Sin Capital"],
-            enemigos: ["Fronteras vecinas"],
-            autor: "Isabel",
-        };
-    });
-
-    console.log("Finalizó el mapeo de países a superhéroes.");
-    return mappedHeroes;
+    return countries
+        .filter(country => country.languages && country.languages.spa) // Solo países con idioma "spa"
+        .map(country => ({
+            nombreSuperHeroe: country.name?.common || "Desconocido", // Nombre común
+            nombreReal: country.name?.nativeName?.spa?.official || country.name?.official || "N/A", // Nombre oficial en español
+            edad: country.gini && Object.values(country.gini).length > 0 
+                ? Object.values(country.gini)[0] 
+                : 0, // GINI como edad (número)
+            planetaOrigen: country.region || "Desconocido", // Región
+            debilidad: country.subregion || "No especificada", // Subregión
+            poderes: [
+                `Población: ${country.population}`,
+                `Área: ${country.area} km²`
+            ],
+            aliados: country.borders || [], // Fronteras como array
+            enemigos: country.timezones || ["Sin información"], // Timezones como array
+            autor: "ISABENSA", // Autor fijo
+        }));
 }
 
 /**
- * Procesa los países desde la API, los adapta a superhéroes y los almacena en la base de datos.
+ * Procesa los países desde la API externa y los guarda en la base de datos.
  */
 async function processCountriesAsHeroes() {
     try {
         console.log("Consumiendo API externa...");
-
-        // Hacer la solicitud con Axios configurado
         const response = await axiosInstance.get('/all');
-        console.log("Respuesta recibida de la API.");
-
         const countries = response.data;
-        console.log(`Total de países recibidos: ${countries.length}`);
 
-        // Mapear los datos a superhéroes
+        console.log(`Total de países recibidos: ${countries.length}`);
         const mappedHeroes = mapToSuperHeroes(countries);
 
-        console.log("Insertando superhéroes en la base de datos...");
+        console.log("Insertando datos en la base de datos...");
         await SuperHero.insertMany(mappedHeroes);
-        console.log("Superhéroes procesados y guardados en la base de datos exitosamente.");
+        console.log("Datos guardados exitosamente.");
     } catch (error) {
-        console.error("Error procesando los países como superhéroes:", error.message);
-        console.log("Detalles del error:", error);
+        console.error("Error al procesar países como superhéroes:", error.message);
+        throw error; // Lanza el error para manejarlo en el bloque principal
     } finally {
         console.log("Cerrando la conexión a la base de datos...");
         mongoose.connection.close();
-        console.log("Conexión cerrada.");
     }
 }
 
@@ -94,12 +78,10 @@ async function processCountriesAsHeroes() {
 (async () => {
     try {
         console.log("Conectando a la base de datos...");
-        await connectDB(); // Llamar a la función de conexión
-        console.log("Conexión a la base de datos establecida.");
-        await processCountriesAsHeroes();
-    } catch (dbError) {
-        console.error("Error al conectar a la base de datos:", dbError.message);
-    } finally {
-        console.log("Script finalizado.");
+        await connectDB();
+        console.log("Conexión exitosa.");
+        await processCountriesAsHeroes(); // Llama a la función que faltaba
+    } catch (error) {
+        console.error("Error de conexión:", error.message);
     }
 })();
