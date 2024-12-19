@@ -1,32 +1,59 @@
+import SuperHero from '../models/SuperHero.mjs';
 
-import { getAllCountries } from '../repositories/countryRepository.mjs';
-
+/**
+ * Obtiene todos los países guardados con el autor ISABENSA y los transforma al formato esperado por la vista.
+ * @returns {Promise<Array>} - Lista de países transformados.
+ */
 export const fetchCountries = async () => {
+  const countries = await SuperHero.find({ autor: 'ISABENSA' });
+  const transformed = countries.map(country => ({
+    name: country.nombreSuperHeroe,
+    officialName: country.nombreReal,
+    borders: country.aliados.join(', '),
+    gini: country.edad !== undefined && country.edad !== null ? country.edad : 'No especificado',
+    population: country.poderes[0]?.split(': ')[1] || 'No disponible',
+    area: country.poderes[1]?.split(': ')[1] || 'No disponible',
+    timezones: country.enemigos.join(', '),
+    region: country.planetaOrigen || 'No especificado',
+    subregion: country.debilidad || 'No especificado',
+    creador: country.autor,
+  }));
+  console.log('Datos transformados:', transformed); // TEMPORAL PARA DEPURACIÓN
+  return transformed;
+};
+
+/**
+ * Mapea los datos ingresados en el formulario al formato esperado por el modelo SuperHero.
+ * @param {Object} data - Datos del formulario.
+ * @returns {Object} - Datos mapeados para el modelo SuperHero.
+ */
+export const mapCountryToSuperHero = (data) => {
+  return {
+    nombreSuperHeroe: data.name,
+    nombreReal: data.name,
+    aliados: data.borders ? data.borders.split(',').map(border => border.trim()) : [],
+    edad: data.gini !== undefined && data.gini !== null ? parseFloat(data.gini) : 0,
+    planetaOrigen: data.region || 'No especificado',
+    debilidad: data.subregion || 'No especificado',
+    poderes: [`Población: ${data.population}`, `Área: ${data.area} km²`],
+    enemigos: data.timezones ? data.timezones.split(',').map(zone => zone.trim()) : ['Sin información'],
+    autor: 'ISABENSA',
+  };
+};
+
+/**
+ * Guarda un nuevo país en la base de datos.
+ * @param {Object} data - Datos del formulario.
+ * @returns {Promise<{success: boolean, message: string, country?: Object}>} - Resultado del guardado.
+ */
+export const saveCountry = async (data) => {
   try {
-    console.log('Ejecutando servicio: fetchCountries');
-
-    // Obtener datos desde la base de datos
-    const rawCountries = await getAllCountries({ autor: 'ISABENSA' });
-    console.log('Datos CRUDOS obtenidos de la base de datos:', JSON.stringify(rawCountries, null, 2)); // <-- LOG IMPORTANTE
-
-    // Mapeo de los datos
-    const mappedCountries = rawCountries.map(country => ({
-      name: country.nombreSuperHeroe || 'Desconocido',
-      officialName: country.nombreReal || 'N/A',
-      borders: Array.isArray(country.aliados) ? country.aliados.join(', ') : 'N/A',
-      gini: country.edad || 'N/A',
-      population: country.poderes?.[0]?.split(': ')[1] || 'N/A',
-      area: country.poderes?.[1]?.split(': ')[1]?.replace(' km²', '') || 'N/A',
-      timezones: Array.isArray(country.enemigos) ? country.enemigos.join(', ') : 'N/A',
-      region: country.planetaOrigen || 'Desconocido',
-      subregion: country.debilidad || 'No especificada',
-      creador: country.autor || 'N/A',
-    }));
-
-    console.log('Datos MAPEADOS para la vista:', mappedCountries); // Log del mapeo final
-    return mappedCountries;
+    const mappedData = mapCountryToSuperHero(data);
+    const newCountry = new SuperHero(mappedData);
+    const savedCountry = await newCountry.save();
+    return { success: true, message: 'País guardado exitosamente.', country: savedCountry };
   } catch (error) {
-    console.error('Error al mapear los datos de países:', error.message);
-    throw error;
+    console.error('Error al guardar el país:', error.message);
+    return { success: false, message: 'Error al guardar el país. Por favor, intente nuevamente.' };
   }
 };

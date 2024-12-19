@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Agregar País</title>
+</head>
+<body>
+  <h1>Agregar un Nuevo País</h1>
+
+  <!-- Formulario para agregar un nuevo país -->
+  <form action="/api/paises/agregar" method="POST">
+    <label for="name">Nombre Oficial:</label>
+    <input type="text" id="name" name="name" required minlength="3" maxlength="90">
+
+    <label for="capital">Capital:</label>
+    <input type="text" id="capital" name="capital" required minlength="3" maxlength="90">
+
+    <label for="borders">Fronteras (separadas por comas):</label>
+    <input type="text" id="borders" name="borders">
+
+    <label for="area">Área:</label>
+    <input type="number" id="area" name="area" required min="1">
+
+    <label for="population">Población:</label>
+    <input type="number" id="population" name="population" required min="1">
+
+    <label for="gini">Índice GINI:</label>
+    <input type="number" id="gini" name="gini" required min="0" max="100" step="0.01">
+
+    <label for="timezones">Zonas Horarias (separadas por comas):</label>
+    <input type="text" id="timezones" name="timezones">
+
+    <button type="submit">Guardar</button>
+    <button type="button" onclick="window.location.href='/api/paises'">Volver al Dashboard</button>
+  </form>
+
+  <% if (errors) { %>
+    <ul style="color: red;">
+      <% errors.forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+</body>
+</html>
