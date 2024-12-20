@@ -11,11 +11,15 @@ export const validateCountry = [
 
   body('borders')
     .optional()
+    .isString().withMessage('Las fronteras deben ser una cadena de texto separada por comas.')
     .custom((value) => {
-      const borders = value.split(',');
+      const borders = value.split(',').map(border => border.trim());
       for (const border of borders) {
-        if (!/^[A-Z]{3}$/.test(border.trim())) {
+        if (!/^[A-Z]{3}$/.test(border)) {
           throw new Error('Cada frontera debe ser un código de 3 letras mayúsculas.');
+        }
+        if (border.length < 3 || border.length > 60) {
+          throw new Error('Cada frontera debe tener entre 3 y 60 caracteres.');
         }
       }
       return true;
@@ -33,11 +37,12 @@ export const validateCountry = [
 
   body('timezones')
     .optional()
+    .isString().withMessage('Las zonas horarias deben ser una cadena de texto separada por comas.')
     .custom((value) => {
-      const timezones = value.split(',');
+      const timezones = value.split(',').map(timezone => timezone.trim());
       for (const timezone of timezones) {
-        if (timezone.trim().length === 0) {
-          throw new Error('Cada zona horaria debe ser una cadena no vacía.');
+        if (timezone.length < 3 || timezone.length > 60) {
+          throw new Error('Cada zona horaria debe tener entre 3 y 60 caracteres.');
         }
       }
       return true;

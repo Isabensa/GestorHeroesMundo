@@ -36,6 +36,18 @@ export const renderAddPais = (req, res) => {
 
 // Agrega o actualiza un país
 export const addPais = async (req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    console.log('Errores de validación:', errors.array());
+    return res.render('addpais', {
+      layout: 'layout2',
+      errors: errors.array(), // Pasar los errores a la vista
+      success: null,
+      pais: req.body, // Mantener los datos ingresados en el formulario
+    });
+  }
+
   try {
     const { id, name, capital, borders, area, population, gini, timezones, region, subregion } = req.body;
 
@@ -59,14 +71,12 @@ export const addPais = async (req, res) => {
         layout: 'layout2',
         success: result.message,
         errors: null,
-        error: null,
       });
     } else {
       res.render('addpais', {
         layout: 'layout2',
         success: null,
         errors: [{ msg: result.message }],
-        error: result.message,
       });
     }
   } catch (error) {
@@ -75,7 +85,6 @@ export const addPais = async (req, res) => {
       layout: 'layout2',
       success: null,
       errors: [{ msg: 'Error interno del servidor.' }],
-      error: 'Error interno del servidor.',
     });
   }
 };
