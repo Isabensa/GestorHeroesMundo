@@ -1,0 +1,41 @@
+<form action="/api/paises/buscar" method="POST">
+  <label for="idPais">ID del País:</label>
+  <input type="text" id="idPais" name="idPais" required value="<%= pais && pais.id ? pais.id : '' %>">
+  <button type="submit">Buscar País</button>
+  <button type="button" onclick="window.location.href='/api/paises'">Volver al Dashboard</button>
+</form>
+
+<% if (pais) { %>
+  <form action="/api/paises/editar/<%= pais.id %>" method="POST">
+    <label for="name">Nombre:</label>
+    <input type="text" id="name" name="name" value="<%= pais.name || '' %>" required>
+
+    <label for="capital">Capital:</label>
+    <input type="text" id="capital" name="capital" value="<%= pais.capital || '' %>" required>
+
+    <label for="borders">Fronteras:</label>
+    <input type="text" id="borders" name="borders" value="<%= pais.borders || '' %>">
+
+    <label for="area">Área:</label>
+    <input type="number" id="area" name="area" value="<%= pais.area || '' %>" required>
+
+    <label for="population">Población:</label>
+    <input type="number" id="population" name="population" value="<%= pais.population || '' %>" required>
+
+    <label for="gini">Índice GINI:</label>
+    <input type="number" id="gini" name="gini" value="<%= pais.gini || '' %>">
+
+    <label for="timezones">Zonas Horarias:</label>
+    <input type="text" id="timezones" name="timezones" value="<%= pais.timezones || '' %>">
+
+    <label for="region">Región:</label>
+    <input type="text" id="region" name="region" value="<%= pais.region || '' %>" required>
+
+    <label for="subregion">Subregión:</label>
+    <input type="text" id="subregion" name="subregion" value="<%= pais.subregion || '' %>" required>
+
+    <button type="submit">Guardar Cambios</button>
+  </form>
+<% } else { %>
+  <p>No se ha encontrado ningún país. Intente buscar nuevamente.</p>
+<% } %>

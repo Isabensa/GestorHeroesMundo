@@ -1,14 +1,15 @@
 <h1>Dashboard de Países</h1>
 <div style="display: inline-block; margin-left: 20px;">
   <button onclick="window.location.href='/api/paises/agregar'">Agregar País</button>
-  <button onclick="window.location.href='/api/paises/editar'">Editar País</button>
-  <button onclick="window.location.href='/api/paises/borrar'">Borrar País</button>
+  <button onclick="window.location.href='/api/paises/editar'">Editar País</button> <!-- Vinculado a edit2.ejs -->
+  <button onclick="window.location.href='/api/paises/eliminar'">Borrar País</button> <!-- Vinculado a delete2.ejs -->
 </div>
-
 
 <table border="1">
   <thead>
     <tr>
+      <th>NRO PAIS</th> <!-- Nueva columna para el número del país -->
+      <th>ID</th> <!-- Nueva columna para mostrar el ID -->
       <th>Nombre</th>
       <th>Nombre Oficial</th>
       <th>Fronteras</th>
@@ -23,14 +24,16 @@
   </thead>
   <tbody>
     <% if (paises && paises.length > 0) { %>
-      <% paises.forEach(pais => { %>
+      <% paises.forEach((pais, index) => { %> <!-- Agregamos un índice para numerar los países -->
         <tr>
+          <td><%= index + 1 %></td> <!-- Renderiza el número del país -->
+          <td><%= pais.id || 'No disponible' %></td> <!-- Muestra el ID del país -->
           <td><%= pais.name %></td>
-          <td><%= pais.officialName %></td>
+          <td><%= pais.capital %></td> <!-- Ajustado a capital -->
           <td><%= pais.borders %></td>
           <td><%= pais.gini %></td>
           <td><%= pais.population %></td>
-          <td><%= pais.area %> km²</td>
+          <td><%= pais.area ? `${pais.area} km²` : 'No disponible' %></td> <!-- Asegura que área se muestre correctamente -->
           <td><%= pais.timezones %></td>
           <td><%= pais.region %></td>
           <td><%= pais.subregion %></td>
@@ -39,7 +42,7 @@
       <% }) %>
     <% } else { %>
       <tr>
-        <td colspan="10">No hay datos disponibles</td>
+        <td colspan="12">No hay datos disponibles</td> <!-- Ajustado colspan por la nueva columna ID -->
       </tr>
     <% } %>
   </tbody>

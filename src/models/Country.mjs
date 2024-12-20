@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const countrySchema = new mongoose.Schema({
     name: { type: String, required: true }, // Nombre del país
-    capital: { type: [String], default: ['Desconocida'] }, // Capital
+    capital: { type: String, default: 'Desconocida' }, // Capital como string único
     languages: { type: [String], required: true }, // Idiomas como array de strings
     population: { type: Number, min: 0, default: 0 }, // Población
     region: { type: String, default: 'Desconocido' }, // Región
