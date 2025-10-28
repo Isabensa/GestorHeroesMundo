@@ -1,104 +1,98 @@
-# Documentación del Proyecto
+GestorHeroesMundo: Documentación del Proyecto
 
-## Objetivos del Proyecto
-El objetivo principal de este proyecto es crear una aplicación web que permita la gestión de datos de superhéroes y países, integrando funcionalidades como:
+Aplicación web fullstack desarrollada con Node.js, Express y MongoDB, que permite la gestión de superhéroes y países, integrando información obtenida de APIs externas. 
+El sistema aplica un enfoque modular y escalable basado en el patrón MVC (Modelo–Vista–Controlador).
 
-1. Procesamiento y almacenamiento de datos obtenidos de APIs externas.
-2. Validación y transformación de datos antes de almacenarlos en la base de datos.
-3. Presentación de datos en una interfaz web intuitiva utilizando plantillas EJS.
-4. Manejo de errores y validaciones robustas.
+🎯 Objetivos del Proyecto
+El objetivo principal de este proyecto es desarrollar una aplicación web robusta que:
+- Procese y almacene datos obtenidos de APIs externas.
+- Valide y transforme los datos antes de guardarlos en la base de datos.
+- Presente los resultados en una interfaz web intuitiva mediante plantillas EJS.
+- Implemente un manejo de errores sólido y validaciones consistentes.
 
-## Tecnologías Utilizadas
-- **Node.js**: Entorno de ejecución para JavaScript.
-- **Express.js**: Framework para la creación de aplicaciones web.
-- **MongoDB**: Base de datos NoSQL para almacenar los datos procesados.
-- **Mongoose**: ODM para interactuar con MongoDB.
-- **Axios**: Cliente HTTP para consumir APIs externas.
-- **EJS**: Motor de plantillas para renderizar vistas.
+🧠 Tecnologías Utilizadas
+- Node.js: Entorno de ejecución para JavaScript.
+- Express.js: Framework backend para crear servidores web.
+- MongoDB: Base de datos NoSQL para almacenar los datos procesados.
+- Mongoose: ODM para interactuar con MongoDB.
+- Axios: Cliente HTTP para consumir la API externa de países.
+- EJS: Motor de plantillas para renderizar vistas dinámicas.
+- Express Validator: Validación de formularios.
+- Helmet: Seguridad HTTP.
+- Dotenv: Manejo de variables de entorno.
 
-## Estructura del Proyecto
+🏗️ Estructura del Proyecto
+src/
+ ├── app.mjs                # Archivo principal del servidor
+ ├── config/                # Configuraciones (DB, entorno)
+ ├── controllers/           # Controladores para superhéroes y países
+ ├── filtrarPaises.mjs      # Procesa datos desde la API de países
+ ├── models/                # Modelos de datos de MongoDB
+ ├── public/                # Archivos estáticos (CSS, JS, imágenes)
+ ├── repositories/          # Capa de acceso a la base de datos
+ ├── routes/                # Definición de rutas principales
+ ├── services/              # Lógica de negocio (servicios)
+ ├── testRepository.mjs     # Pruebas del servicio de países
+ ├── validators/            # Validaciones y manejo de errores
+ ├── views/                 # Vistas EJS (módulo de Superhéroes)
+ └── views2/                # Vistas EJS (módulo de Países)
 
-```
-/src
-  |-- app.mjs                # Archivo principal para iniciar el servidor
-  |-- config                 # Configuraciones de la aplicación
-  |-- controllers            # Lógica de las rutas
-  |-- filtrarPaises.mjs      # Procesamiento de datos de la API de países
-  |-- models                 # Modelos de datos para MongoDB
-  |-- public                 # Archivos estáticos (CSS, JS, imágenes)
-  |-- repositories           # Abstracción para acceso a datos
-  |-- routes                 # Definición de rutas
-  |-- services               # Servicios para lógica de negocio
-  |-- testRepository.mjs     # Archivo para pruebas del servicio de países
-  |-- validators             # Validaciones de datos
-  |-- views                  # Plantillas principales de EJS
-  |-- views2                 # Plantillas adicionales para datos de países
-```
+⚙️ Pasos para Ejecutar la Aplicación
+1. Clonar el repositorio:
+   git clone https://github.com/tuusuario/GestorHeroesMundo.git
+   cd GestorHeroesMundo
 
-## Pasos para Ejecutar la Aplicación
-
-1. **Clonar el repositorio**:
-   ```bash
-   git clone <URL_DEL_REPOSITORIO>
-   cd <NOMBRE_DEL_PROYECTO>
-   ```
-
-2. **Instalar dependencias**:
-   Asegúrese de tener Node.js instalado, luego ejecute:
-   ```bash
+2. Instalar dependencias:
    npm install
-   ```
 
-3. **Configurar variables de entorno**:
-   Cree un archivo `.env` en la raíz del proyecto con las siguientes variables:
-   ```env
+3. Configurar las variables de entorno (.env):
    PORT=3000
-   MONGO_URI=<URL_DE_SU_BASE_DE_DATOS>
-   ```
+   MONGO_URI=mongodb+srv://usuario:password@cluster.mongodb.net/
 
-4. **Iniciar la aplicación**:
-   ```bash
-   node src/app.mjs
-   ```
+4. Iniciar el servidor:
+   npm start
+   o en modo desarrollo:
+   npm run dev
 
-5. **Abrir en el navegador**:
-   Visite `http://localhost:3000` para interactuar con la aplicación.
+5. Abrir en el navegador: http://localhost:3000
 
-## Validaciones y Manejo de Errores
+🔍 Validaciones y Manejo de Errores
+✅ Validaciones
+- Los formularios se validan dentro de la carpeta validators/.
+- Los campos como borders y timezones se transforman para almacenarse como arrays.
+- Se garantiza la integridad y coherencia de los datos ingresados.
 
-- **Validaciones**:
-  - Los datos enviados mediante formularios son validados en `validators` antes de ser procesados.
-  - Los campos como `borders` y `timezones` son transformados para ser almacenados como arrays.
+⚠️ Manejo de Errores
+- Fallos en las peticiones a la API externa se manejan con reintentos automáticos en Axios.
+- Los errores inesperados se registran en consola para depuración.
+- Las validaciones incorrectas generan mensajes claros y descriptivos en la interfaz.
 
-- **Manejo de errores**:
-  - La aplicación maneja errores de conexión con la API externa mediante reintentos automáticos configurados en Axios.
-  - Errores inesperados se registran en la consola para depuración.
+🌐 API Externa
+La aplicación consume la API pública de países: https://restcountries.com/v3.1/all
+Los datos se procesan y almacenan en MongoDB para evitar llamadas repetitivas y mejorar el rendimiento general del sistema.
 
-## Consideraciones Especiales
+🧩 Multivistas y Organización
+- Superhéroes: gestionados desde views/.
+- Países: gestionados desde views2/.
+Cada módulo cuenta con sus propios formularios, validaciones y vistas.
 
-1. **APIs Externas**:
-   - La aplicación depende de la API `https://restcountries.com/v3.1` para obtener datos de países.
+📸 Capturas de Pantalla (Sugeridas)
+- Interfaz principal.
+- Formulario de registro de superhéroes.
+- Panel de países procesados.
+- Mensajes de validación y errores.
 
-2. **Rendimiento**:
-   - Los datos de la API externa son procesados y almacenados localmente para reducir llamadas repetitivas.
+🎬 Demostración en Video (opcional)
+Se recomienda grabar un breve recorrido mostrando:
+1. Cómo se ingresan datos válidos e inválidos.
+2. Cómo se cargan los países desde la API externa.
+3. Cómo se guardan y visualizan los datos en MongoDB.
 
-3. **Multivistas**:
-   - Las vistas para superhéroes y países están separadas en los directorios `views` y `views2`.
+🧾 Conclusión
+GestorHeroesMundo combina integración con APIs externas, validaciones robustas y una interfaz clara y funcional. 
+Su diseño modular y escalable lo convierte en una base sólida para proyectos educativos o profesionales de gestión web y procesamiento de datos.
 
-## Capturas de Pantalla y Demostración
-
-- **Capturas de pantalla**:
-  Incluya capturas de:
-  - La interfaz principal.
-  - Formularios de entrada.
-  - Mensajes de error por validaciones fallidas.
-
-- **Video**:
-  Se recomienda grabar un recorrido breve mostrando:
-  1. Cómo se ingresan datos válidos e inválidos.
-  2. Cómo se presentan los datos almacenados.
-
-## Conclusión
-Este proyecto combina integraciones con APIs externas, validaciones robustas y una interfaz intuitiva para la gestión de datos. El enfoque modular asegura escalabilidad y mantenibilidad para futuras expansiones.
+👩‍💻 Autora
+Celia Isabel Bensadón - Desarrolladora Fullstack MERN | Docente en Tecnología Educativa  
 
 
