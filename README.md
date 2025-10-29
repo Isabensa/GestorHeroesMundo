@@ -95,4 +95,9 @@ Su diseño modular y escalable lo convierte en una base sólida para proyectos e
 👩‍💻 Autora
 Celia Isabel Bensadón - Desarrolladora Fullstack MERN | Docente en Tecnología Educativa  
 
+## Última actualización
+- Corrección del módulo Países (layout2.ejs, dashboard2.ejs y controladores)
+- Estilos aplicados correctamente desde style2.css
+- Navegación funcional con EJS y Express
+
 
