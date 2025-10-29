@@ -1,34 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Eliminar País</title>
-</head>
-<body>
-  <h1>Eliminar País</h1>
+<div class="contenedor-dashboard">
+  <h2 class="titulo-dashboard">🗑️ Eliminar País</h2>
 
-  <!-- Formulario para buscar un país por ID -->
-  <form action="/api/paises/eliminar/buscar" method="POST">
-    <label for="idPais">ID del País:</label>
-    <input type="text" id="idPais" name="idPais" required>
-    <button type="submit">Buscar País</button>
-    <button type="button" onclick="window.location.href='/api/paises'">Volver al Dashboard</button>
+  <form action="/paises/eliminar/buscar" method="POST" class="formulario-pais">
+    <div class="form-grupo">
+      <label for="idPais">ID del País:</label>
+      <input type="text" id="idPais" name="idPais" required>
+    </div>
+    <div class="botones-form">
+      <button type="submit" class="btn-agregar">🔍 Buscar País</button>
+      <button type="button" class="btn-volver" onclick="window.location.href='/paises/dashboard'">← Volver al Dashboard</button>
+    </div>
   </form>
 
   <% if (pais) { %>
-    <h2>Datos del País</h2>
-    <p><strong>Nombre:</strong> <%= pais.name %></p>
-    <p><strong>Capital:</strong> <%= pais.capital %></p>
-    <p><strong>Área:</strong> <%= pais.area %></p>
-    <p><strong>Población:</strong> <%= pais.population %></p>
-    <p><strong>Fronteras:</strong> <%= pais.borders %></p>
-    <p><strong>Zonas Horarias:</strong> <%= pais.timezones %></p>
-    <p><strong>Región:</strong> <%= pais.region %></p>
-    <p><strong>Subregión:</strong> <%= pais.subregion %></p>
+    <div class="datos-pais">
+      <h3>Datos del País</h3>
+      <p><strong>Nombre:</strong> <%= pais.name %></p>
+      <p><strong>Capital:</strong> <%= pais.capital %></p>
+      <p><strong>Área:</strong> <%= pais.area %> km²</p>
+      <p><strong>Población:</strong> <%= pais.population.toLocaleString() %></p>
+      <p><strong>Región:</strong> <%= pais.region %></p>
+      <p><strong>Subregión:</strong> <%= pais.subregion %></p>
 
-    <!-- Botón para borrar el país -->
-    <form action="/api/paises/eliminar/<%= pais.id %>" method="POST">
-      <button type="submit" style="background-color: red; color: white;">Borrar País</button>
-    </form>
+      <form action="/paises/eliminar/<%= pais.id %>" method="POST" class="formulario-pais">
+        <div class="botones-form">
+          <button type="submit" class="btn-borrar" onclick="return confirm('¿Seguro que deseas eliminar este país?')">🗑️ Borrar País</button>
+        </div>
+      </form>
+    </div>
   <% } %>
-</body>
-</html>
+</div>

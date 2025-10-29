@@ -2,53 +2,89 @@ import express from 'express';
 import expressLayouts from 'express-ejs-layouts';
 import { connectDB } from './config/dbConfig.mjs';
 import superHeroRoutes from './routes/superHeroRoutes.mjs';
-import countryRoutes from './routes/countryRoutes.mjs'; // Importar rutas de países
+import countryRoutes from './routes/countryRoutes.mjs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// ================================
+// CONFIGURACIÓN DE RUTAS Y PATH
+// ================================
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Conexión a MongoDB
+// ================================
+// CONEXIÓN A MONGODB
+// ================================
 connectDB();
 
-// Middleware para parsear JSON y datos de formularios
+// ================================
+// MIDDLEWARES GENERALES
+// ================================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Configurar motor de plantillas EJS
-app.set('view engine', 'ejs');
-app.set('views', ['./views', './views2']); // Incluir views2 para las vistas de países
+// ✅ Archivos estáticos (CSS, imágenes, etc.)
+app.use(express.static(path.join(__dirname, 'public')));
+
+// ✅ Configurar layouts globales
 app.use(expressLayouts);
 
-// Configuración de layout
-app.set('layout', 'layouts/layout'); // Layout principal para superhéroes
+// ================================
+// CONFIGURACIÓN DE MOTOR DE PLANTILLAS
+// ================================
 
-// Servir archivos estáticos
-app.use(express.static('public'));
+// Motor EJS
+app.set('view engine', 'ejs');
 
-// Middleware global para registrar cada solicitud
+// ✅ Se agregan ambas carpetas de vistas (para superhéroes y países)
+app.set('views', [
+  path.join(__dirname, 'views'),
+  path.join(__dirname, 'views2'),
+]);
+
+// ✅ Layout por defecto (superhéroes usa layout.ejs)
+app.set('layout', 'layouts/layout');
+
+// ================================
+// LOG DE TODAS LAS SOLICITUDES
+// ================================
 app.use((req, res, next) => {
   console.log(`Solicitud recibida: ${req.method} ${req.url}`);
   next();
 });
 
-// Configuración de rutas
-// Rutas de superhéroes con prefijo /api/superheroes
-app.use('/api/superheroes', superHeroRoutes);
+// ================================
+// RUTAS PRINCIPALES
+// ================================
 
-// Rutas de países con prefijo /api/paises
-app.use('/api/paises', countryRoutes);
-
-// Ruta principal (home)
+// 🏠 Página inicial con acceso a ambos módulos
 app.get('/', (req, res) => {
-  res.render('pages/home', { title: 'Inicio' });
+  res.render('pages/index', { title: 'Gestor Héroes Mundo' });
 });
 
-// Manejo de errores para ruta no encontrada
+// 🦸‍♂️ Módulo Superhéroes
+app.use('/superheroes', superHeroRoutes);
+
+// 🌍 Módulo Países
+app.use('/paises', countryRoutes);
+
+// ================================
+// MANEJO DE ERRORES (404)
+// ================================
 app.use((req, res) => {
-  res.status(404).send({ mensaje: "Ruta no encontrada" });
+  res.status(404).render('pages/404', {
+    layout: 'layouts/layout', // ✅ evita error "layout is not defined"
+    title: 'Página no encontrada',
+    mensaje: 'La ruta solicitada no existe en el sistema.',
+  });
 });
 
-// Iniciar servidor
+// ================================
+// INICIO DEL SERVIDOR
+// ================================
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en el puerto ${PORT}`);
 });

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ✅ evita el error "title is not defined" -->
+  <title><%= typeof title !== 'undefined' ? title : "🌍 Dashboard Países" %></title>
+
+  <!-- ✅ ruta correcta según tu estructura -->
+  <link rel="stylesheet" href="/style2.css" />
+  <link rel="icon" href="/images/icono.png" />
+</head>
+
+<body>
+  <header class="header">
+    <h2>🌍 API de Países</h2>
+    <nav>
+      <a href="/superheroes/listado">Superhéroes</a>
+      <a href="/paises/dashboard">Países</a>
+      <a href="/">Inicio</a>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    <!-- Aquí EJS insertará automáticamente el contenido -->
+    <%- body %>
+  </main>
+
+  <footer class="footer">
+    <p>Países - ISABENSA</p>
+  </footer>
+</body>
+</html>

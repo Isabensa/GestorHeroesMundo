@@ -555,3 +555,77 @@ input:focus {
   transform: scale(1.1); /* Efecto de agrandamiento */
 }
 
+/* === Pantalla inicial === */
+body.inicio {
+  background-color: #0b0b1a;
+  color: #e6e6e6;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.header-inicio {
+  background-color: #1a1a2e;
+  padding: 20px;
+  border-bottom: 2px solid #ff4b4b;
+}
+
+.header-image {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+}
+
+.titulo-inicio {
+  color: #ff4b4b;
+  font-size: 2.2rem;
+  margin-top: 10px;
+}
+
+.subtitulo-inicio {
+  color: #ccc;
+  margin-bottom: 20px;
+}
+
+.main-inicio {
+  padding: 40px 20px;
+}
+
+.contenedor-botones {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.btn-modulo {
+  background-color: #ff4b4b;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.btn-modulo:hover {
+  background-color: #1f1f3d;
+  color: #ff4b4b;
+  border: 2px solid #ff4b4b;
+  transform: scale(1.05);
+}
+
+.footer-inicio {
+  background-color: #1a1a2e;
+  color: #aaa;
+  font-size: 0.9rem;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}

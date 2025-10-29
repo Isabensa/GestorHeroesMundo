@@ -1,49 +1,58 @@
-<h1>Dashboard de Países</h1>
-<div style="display: inline-block; margin-left: 20px;">
-  <button onclick="window.location.href='/api/paises/agregar'">Agregar País</button>
-  <button onclick="window.location.href='/api/paises/editar'">Editar País</button> <!-- Vinculado a edit2.ejs -->
-  <button onclick="window.location.href='/api/paises/eliminar'">Borrar País</button> <!-- Vinculado a delete2.ejs -->
-</div>
+<div class="contenedor-dashboard">
+  <h2 class="titulo-dashboard">🌍 Dashboard de Países</h2>
 
-<table border="1">
-  <thead>
-    <tr>
-      <th>NRO PAIS</th> <!-- Nueva columna para el número del país -->
-      <th>ID</th> <!-- Nueva columna para mostrar el ID -->
-      <th>Nombre</th>
-      <th>Nombre Oficial</th>
-      <th>Fronteras</th>
-      <th>Índice GINI</th>
-      <th>Población</th>
-      <th>Área</th>
-      <th>Zonas Horarias</th>
-      <th>Región</th>
-      <th>Subregión</th>
-      <th>Creador</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% if (paises && paises.length > 0) { %>
-      <% paises.forEach((pais, index) => { %> <!-- Agregamos un índice para numerar los países -->
+  <div class="botones-dashboard">
+    <button class="btn-agregar" onclick="window.location.href='/paises/agregar'">Agregar País</button>
+    <button class="btn-editar" onclick="window.location.href='/paises/editar'">Editar País</button>
+    <button class="btn-borrar" onclick="window.location.href='/paises/eliminar'">Borrar País</button>
+  </div>
+
+  <div class="tabla-container">
+    <table class="tabla-paises">
+      <thead>
         <tr>
-          <td><%= index + 1 %></td> <!-- Renderiza el número del país -->
-          <td><%= pais.id || 'No disponible' %></td> <!-- Muestra el ID del país -->
-          <td><%= pais.name %></td>
-          <td><%= pais.capital %></td> <!-- Ajustado a capital -->
-          <td><%= pais.borders %></td>
-          <td><%= pais.gini %></td>
-          <td><%= pais.population %></td>
-          <td><%= pais.area ? `${pais.area} km²` : 'No disponible' %></td> <!-- Asegura que área se muestre correctamente -->
-          <td><%= pais.timezones %></td>
-          <td><%= pais.region %></td>
-          <td><%= pais.subregion %></td>
-          <td><%= pais.creador %></td>
+          <th>N°</th>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Capital</th>
+          <th>Fronteras</th>
+          <th>Índice GINI</th>
+          <th>Población</th>
+          <th>Área</th>
+          <th>Zonas Horarias</th>
+          <th>Región</th>
+          <th>Subregión</th>
+          <th>Creador</th>
         </tr>
-      <% }) %>
-    <% } else { %>
-      <tr>
-        <td colspan="12">No hay datos disponibles</td> <!-- Ajustado colspan por la nueva columna ID -->
-      </tr>
-    <% } %>
-  </tbody>
-</table>
+      </thead>
+      <tbody>
+        <% if (paises && paises.length > 0) { %>
+          <% paises.forEach((pais, index) => { %>
+            <tr>
+              <td><%= index + 1 %></td>
+              <td><%= pais.id || 'N/A' %></td>
+              <td><%= pais.name %></td>
+              <td><%= pais.capital %></td>
+              <td><%= Array.isArray(pais.borders) ? pais.borders.join(', ') : pais.borders || 'N/A' %></td>
+              <td><%= pais.gini || 'No especificado' %></td>
+              <td><%= pais.population.toLocaleString() %></td>
+              <td><%= pais.area ? pais.area.toLocaleString() + ' km²' : 'N/A' %></td>
+              <td><%= Array.isArray(pais.timezones) ? pais.timezones.join(', ') : pais.timezones || 'N/A' %></td>
+              <td><%= pais.region || 'N/A' %></td>
+              <td><%= pais.subregion || 'N/A' %></td>
+              <td><%= pais.creador || 'ISABENSA' %></td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="12" class="sin-datos">⚠️ No hay datos disponibles</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="volver">
+    <a href="/" class="btn-volver">← Volver al Inicio</a>
+  </div>
+</div>
