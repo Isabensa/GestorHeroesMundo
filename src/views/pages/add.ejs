@@ -8,41 +8,54 @@
 
   <!-- Sección del formulario -->
   <div class="form-section">
-    <h1 class="form-title">Agregar superhéroe</h1>
-    <form method="POST" action="/api/add">
+    <h1 class="form-title">Agregar Superhéroe</h1>
+
+    <!-- 🟢 Ruta del formulario corregida -->
+    <form method="POST" action="/superheroes/add">
       <label for="nombreSuperHeroe">Nombre del Superhéroe:</label>
-      <input type="text" id="nombreSuperHeroe" name="nombreSuperHeroe" required />
+      <input type="text" id="nombreSuperHeroe" name="nombreSuperHeroe" value="<%= typeof nombreSuperHeroe !== 'undefined' ? nombreSuperHeroe : '' %>" required />
 
       <label for="nombreReal">Nombre Real:</label>
-      <input type="text" id="nombreReal" name="nombreReal" required />
+      <input type="text" id="nombreReal" name="nombreReal" value="<%= typeof nombreReal !== 'undefined' ? nombreReal : '' %>" required />
 
       <label for="edad">Edad:</label>
-      <input type="number" id="edad" name="edad" min="0" required />
+      <input type="number" id="edad" name="edad" min="0" value="<%= typeof edad !== 'undefined' ? edad : '' %>" required />
 
       <label for="planetaOrigen">Planeta de Origen:</label>
-      <input type="text" id="planetaOrigen" name="planetaOrigen" />
+      <input type="text" id="planetaOrigen" name="planetaOrigen" value="<%= typeof planetaOrigen !== 'undefined' ? planetaOrigen : '' %>" />
 
       <label for="debilidad">Debilidad:</label>
-      <input type="text" id="debilidad" name="debilidad" />
+      <input type="text" id="debilidad" name="debilidad" value="<%= typeof debilidad !== 'undefined' ? debilidad : '' %>" />
 
       <label for="poderes">Poderes (separados por comas):</label>
-      <input type="text" id="poderes" name="poderes" />
+      <input type="text" id="poderes" name="poderes" value="<%= typeof poderes !== 'undefined' ? poderes : '' %>" />
 
       <label for="aliados">Aliados (separados por comas):</label>
-      <input type="text" id="aliados" name="aliados" />
+      <input type="text" id="aliados" name="aliados" value="<%= typeof aliados !== 'undefined' ? aliados : '' %>" />
 
       <label for="enemigos">Enemigos (separados por comas):</label>
-      <input type="text" id="enemigos" name="enemigos" />
+      <input type="text" id="enemigos" name="enemigos" value="<%= typeof enemigos !== 'undefined' ? enemigos : '' %>" />
 
       <div class="form-buttons">
-        <button type="submit" class="save-button">Guardar</button>
-        <a href="/api" class="home-button">Volver al Home</a>
+        <button type="submit" class="save-button">💾 Guardar</button>
+        <a href="/superheroes/listado" class="home-button">🏠 Volver al Listado</a>
       </div>
 
-      <!-- Mensaje de éxito al final del formulario -->
-      <% if (typeof successMessage !== 'undefined') { %>
+      <!-- 🟢 Mensaje de éxito protegido -->
+      <% if (typeof successMessage !== 'undefined' && successMessage) { %>
         <div class="success-container">
           <p class="success-message"><%= successMessage %></p>
+        </div>
+      <% } %>
+
+      <!-- 🟠 Mensajes de error protegidos -->
+      <% if (typeof errorMessages !== 'undefined' && errorMessages && errorMessages.length > 0) { %>
+        <div class="error-container">
+          <ul>
+            <% errorMessages.forEach(err => { %>
+              <li><%= err %></li>
+            <% }) %>
+          </ul>
         </div>
       <% } %>
     </form>

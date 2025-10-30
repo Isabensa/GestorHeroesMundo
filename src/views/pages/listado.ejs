@@ -1,6 +1,14 @@
 <main class="main-content">
-  <h1 class="listado-title">Esta es la totalidad de los superhéroes de nuestra SuperANSES</h1>
+  <h1 class="listado-title">🦸‍♂️ Superhéroes Registrados en SuperANSES</h1>
 
+  <!-- 🔘 Botones de acción -->
+  <div class="acciones-dashboard">
+    <button class="btn-agregar" onclick="window.location.href='/superheroes/add'">➕ Agregar Superhéroe</button>
+    <button class="btn-editar" onclick="window.location.href='/superheroes/edit'">✏️ Editar Superhéroe</button>
+    <button class="btn-eliminar" onclick="window.location.href='/superheroes/delete'">❌ Eliminar Superhéroe</button>
+  </div>
+
+  <!-- 📋 Tabla de Superhéroes -->
   <table class="superheroes-table">
     <thead>
       <tr>
@@ -15,7 +23,7 @@
         <th>Enemigos</th>
         <th>Autor</th>
         <th>Fecha de Creación</th>
-        <th>Acción</th>
+        <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -27,22 +35,21 @@
           <td><%= superheroe.edad %></td>
           <td><%= superheroe.planetaOrigen %></td>
           <td><%= superheroe.debilidad %></td>
-          <td><%= superheroe.poderes.join(', ') %></td>
-          <td><%= superheroe.aliados.join(', ') %></td>
-          <td><%= superheroe.enemigos.join(', ') %></td>
-          <td><%= superheroe.autor %></td>
-          <td><%= new Date(superheroe.createdAt).toLocaleDateString() %></td>
-          <td>
-            <button class="copy-button" onclick="goHome()">Ir Home</button>
+          <td><%= Array.isArray(superheroe.poderes) ? superheroe.poderes.join(', ') : superheroe.poderes %></td>
+          <td><%= Array.isArray(superheroe.aliados) ? superheroe.aliados.join(', ') : superheroe.aliados %></td>
+          <td><%= Array.isArray(superheroe.enemigos) ? superheroe.enemigos.join(', ') : superheroe.enemigos %></td>
+          <td><%= superheroe.autor || '—' %></td>
+          <td><%= new Date(superheroe.createdAt).toLocaleDateString('es-AR') %></td>
+          <td class="acciones-fila">
+           <button class="btn-ver" onclick="window.location.href='/'">Volver Inicio</button>
+
           </td>
         </tr>
       <% }); %>
     </tbody>
   </table>
-</main>
 
-<script>
-  function goHome() {
-    window.location.href = '/api/'; // Redirige al home
-  }
-</script>
+  <div class="volver-inicio">
+    <button class="btn-volver" onclick="window.location.href='/'">← Volver al Inicio</button>
+  </div>
+</main>

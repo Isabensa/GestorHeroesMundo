@@ -1,17 +1,25 @@
 <div class="contenedor-dashboard">
   <h2 class="titulo-dashboard">✏️ Editar País</h2>
 
-  <form action="/paises/buscar" method="POST" class="formulario-pais">
+  <!-- 🔍 Buscar país por ID -->
+  <form action="/paises/editar/buscar" method="POST" class="formulario-pais">
     <div class="form-grupo">
       <label for="idPais">ID del País:</label>
-      <input type="text" id="idPais" name="idPais" required value="<%= pais && pais.id ? pais.id : '' %>">
+      <input 
+        type="text" 
+        id="idPais" 
+        name="idPais" 
+        required 
+        value="<%= pais && pais.id ? pais.id : '' %>">
     </div>
+
     <div class="botones-form">
       <button type="submit" class="btn-agregar">🔍 Buscar País</button>
       <button type="button" class="btn-volver" onclick="window.location.href='/paises/dashboard'">← Volver al Dashboard</button>
     </div>
   </form>
 
+  <!-- 🚨 Mensajes de error -->
   <% if (errors && errors.length > 0) { %>
     <div class="error-messages">
       <ul>
@@ -22,17 +30,54 @@
     </div>
   <% } %>
 
+  <!-- 📝 Formulario de edición -->
   <% if (pais) { %>
     <form action="/paises/editar/<%= pais.id %>" method="POST" class="formulario-pais">
-      <div class="form-grupo"><label for="name">Nombre:</label><input type="text" id="name" name="name" value="<%= pais.name || '' %>"></div>
-      <div class="form-grupo"><label for="capital">Capital:</label><input type="text" id="capital" name="capital" value="<%= pais.capital || '' %>"></div>
-      <div class="form-grupo"><label for="borders">Fronteras:</label><input type="text" id="borders" name="borders" value="<%= pais.borders || '' %>"></div>
-      <div class="form-grupo"><label for="area">Área:</label><input type="number" id="area" name="area" value="<%= pais.area || '' %>"></div>
-      <div class="form-grupo"><label for="population">Población:</label><input type="number" id="population" name="population" value="<%= pais.population || '' %>"></div>
-      <div class="form-grupo"><label for="gini">Índice GINI:</label><input type="number" id="gini" name="gini" value="<%= pais.gini || '' %>"></div>
-      <div class="form-grupo"><label for="region">Región:</label><input type="text" id="region" name="region" value="<%= pais.region || '' %>"></div>
-      <div class="form-grupo"><label for="subregion">Subregión:</label><input type="text" id="subregion" name="subregion" value="<%= pais.subregion || '' %>"></div>
-      <div class="form-grupo"><label for="timezones">Zonas Horarias:</label><input type="text" id="timezones" name="timezones" value="<%= pais.timezones || '' %>"></div>
+
+      <div class="form-grupo">
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" name="name" value="<%= pais.name || '' %>">
+      </div>
+
+      <div class="form-grupo">
+        <label for="capital">Capital:</label>
+        <input type="text" id="capital" name="capital" value="<%= pais.capital || '' %>">
+      </div>
+
+      <div class="form-grupo">
+        <label for="borders">Fronteras:</label>
+        <input type="text" id="borders" name="borders" value="<%= Array.isArray(pais.borders) ? pais.borders.join(', ') : (pais.borders || '') %>">
+      </div>
+
+      <div class="form-grupo">
+        <label for="area">Área (km²):</label>
+        <input type="number" id="area" name="area" value="<%= pais.area || '' %>">
+      </div>
+
+      <div class="form-grupo">
+        <label for="population">Población:</label>
+        <input type="number" id="population" name="population" value="<%= pais.population || '' %>">
+      </div>
+
+      <div class="form-grupo">
+        <label for="gini">Índice GINI:</label>
+        <input type="number" id="gini" name="gini" step="0.01" value="<%= pais.gini || '' %>">
+      </div>
+
+      <div class="form-grupo">
+        <label for="region">Región:</label>
+        <input type="text" id="region" name="region" value="<%= pais.region || '' %>">
+      </div>
+
+      <div class="form-grupo">
+        <label for="subregion">Subregión:</label>
+        <input type="text" id="subregion" name="subregion" value="<%= pais.subregion || '' %>">
+      </div>
+
+      <div class="form-grupo">
+        <label for="timezones">Zonas Horarias:</label>
+        <input type="text" id="timezones" name="timezones" value="<%= Array.isArray(pais.timezones) ? pais.timezones.join(', ') : (pais.timezones || '') %>">
+      </div>
 
       <div class="botones-form">
         <button type="submit" class="btn-agregar">💾 Guardar Cambios</button>

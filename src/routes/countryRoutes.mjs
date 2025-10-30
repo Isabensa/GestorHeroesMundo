@@ -26,24 +26,31 @@ router.get('/', (req, res) => {
 /* ============================================================
    🌍 Dashboard principal
    ============================================================ */
-router.get('/dashboard', (req, res, next) => {
-  console.log('📥 Solicitud recibida en /paises/dashboard');
-  next();
-}, renderDashboard);
+router.get(
+  '/dashboard',
+  (req, res, next) => {
+    console.log('📥 Solicitud recibida en /paises/dashboard');
+    next();
+  },
+  renderDashboard
+);
 
 /* ============================================================
    ➕ Agregar país
    ============================================================ */
-router.get('/agregar', renderAddPais);
+router.get('/agregar', (req, res) => {
+  console.log('🟢 Renderizando formulario para agregar país');
+  renderAddPais(req, res);
+});
 
-router.post('/agregar', validateCountry, (req, res, next) => {
+router.post('/agregar', validateCountry, async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
     console.log('⚠️ Errores de validación al agregar país:', errors.array());
-    return res.render('views2/layouts/layout2', {
+    return res.render('addpais', {
+      layout: 'layouts/layout2',
       title: 'Agregar País',
-      content: '../addpais',
       errors: errors.array(),
       success: null,
       pais: req.body,
@@ -56,15 +63,43 @@ router.post('/agregar', validateCountry, (req, res, next) => {
 /* ============================================================
    ✏️ Editar país
    ============================================================ */
-router.get('/editar', renderEditPais);                // Muestra formulario de búsqueda
-router.post('/editar/buscar', buscarPais);            // Busca país por ID
-router.post('/editar/:id', guardarPais);              // Guarda los cambios
+// Renderiza la vista de búsqueda
+router.get('/editar', (req, res) => {
+  console.log('✏️ Mostrando formulario de edición de país');
+  renderEditPais(req, res);
+});
+
+// Busca país por ID
+router.post('/editar/buscar', (req, res) => {
+  console.log('🔍 Buscando país por ID...');
+  buscarPais(req, res);
+});
+
+// Guarda los cambios del país editado
+router.post('/editar/:id', (req, res) => {
+  console.log(`💾 Guardando cambios del país con ID: ${req.params.id}`);
+  guardarPais(req, res);
+});
 
 /* ============================================================
    ❌ Eliminar país
    ============================================================ */
-router.get('/eliminar', renderDeletePais);            // Muestra formulario para eliminar
-router.post('/eliminar/buscar', buscarPaisParaEliminar); // Busca país antes de eliminar
-router.post('/eliminar/:id', eliminarPais);           // Elimina el país
+// Renderiza formulario de eliminación
+router.get('/eliminar', (req, res) => {
+  console.log('🗑️ Mostrando formulario para eliminar país');
+  renderDeletePais(req, res);
+});
+
+// Busca país antes de eliminarlo
+router.post('/eliminar/buscar', (req, res) => {
+  console.log('🔎 Buscando país para eliminar...');
+  buscarPaisParaEliminar(req, res);
+});
+
+// Elimina país por ID
+router.post('/eliminar/:id', (req, res) => {
+  console.log(`❌ Eliminando país con ID: ${req.params.id}`);
+  eliminarPais(req, res);
+});
 
 export default router;
