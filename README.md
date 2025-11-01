@@ -5,6 +5,12 @@ Aplicación web fullstack desarrollada con Node.js, Express y MongoDB, que permi
 El sistema aplica un enfoque modular y escalable basado en el patrón MVC (Modelo–Vista–Controlador).
 ![Vista previa del proyecto](src/public/vistaprevia.png)
 
+## 🌐 Deploy del Proyecto
+
+**Gestor Héroes Mundo** ya está en línea. Podés acceder a la versión desplegada en Render desde el siguiente enlace:
+
+🔗 [https://gestorheroesmundo.onrender.com](https://gestorheroesmundo.onrender.com)
+
 🎯 Objetivos del Proyecto
 --
 El objetivo principal de este proyecto es desarrollar una aplicación web robusta que:
