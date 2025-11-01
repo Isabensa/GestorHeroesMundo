@@ -1,10 +1,12 @@
 GestorHeroesMundo: Documentación del Proyecto
+--
 
 Aplicación web fullstack desarrollada con Node.js, Express y MongoDB, que permite la gestión de superhéroes y países, integrando información obtenida de APIs externas. 
 El sistema aplica un enfoque modular y escalable basado en el patrón MVC (Modelo–Vista–Controlador).
 ![Vista previa del proyecto](src/public/vistaprevia.png)
 
 🎯 Objetivos del Proyecto
+--
 El objetivo principal de este proyecto es desarrollar una aplicación web robusta que:
 - Procese y almacene datos obtenidos de APIs externas.
 - Valide y transforme los datos antes de guardarlos en la base de datos.
@@ -12,6 +14,7 @@ El objetivo principal de este proyecto es desarrollar una aplicación web robust
 - Implemente un manejo de errores sólido y validaciones consistentes.
 
 🧠 Tecnologías Utilizadas
+--
 - Node.js: Entorno de ejecución para JavaScript.
 - Express.js: Framework backend para crear servidores web.
 - MongoDB: Base de datos NoSQL para almacenar los datos procesados.
@@ -23,6 +26,7 @@ El objetivo principal de este proyecto es desarrollar una aplicación web robust
 - Dotenv: Manejo de variables de entorno.
 
 🏗️ Estructura del Proyecto
+--
 src/
  ├── app.mjs                # Archivo principal del servidor
  ├── config/                # Configuraciones (DB, entorno)
@@ -39,6 +43,7 @@ src/
  └── views2/                # Vistas EJS (módulo de Países)
 
 ⚙️ Pasos para Ejecutar la Aplicación
+--
 1. Clonar el repositorio:
    git clone https://github.com/tuusuario/GestorHeroesMundo.git
    cd GestorHeroesMundo
@@ -58,6 +63,7 @@ src/
 5. Abrir en el navegador: http://localhost:3000
 
 🔍 Validaciones y Manejo de Errores
+--
 ✅ Validaciones
 - Los formularios se validan dentro de la carpeta validators/.
 - Los campos como borders y timezones se transforman para almacenarse como arrays.
@@ -69,36 +75,25 @@ src/
 - Las validaciones incorrectas generan mensajes claros y descriptivos en la interfaz.
 
 🌐 API Externa
+--
 La aplicación consume la API pública de países: https://restcountries.com/v3.1/all
 Los datos se procesan y almacenan en MongoDB para evitar llamadas repetitivas y mejorar el rendimiento general del sistema.
 
 🧩 Multivistas y Organización
+--
 - Superhéroes: gestionados desde views/.
 - Países: gestionados desde views2/.
 Cada módulo cuenta con sus propios formularios, validaciones y vistas.
 
-📸 Capturas de Pantalla (Sugeridas)
-- Interfaz principal.
-- Formulario de registro de superhéroes.
-- Panel de países procesados.
-- Mensajes de validación y errores.
-
-🎬 Demostración en Video (opcional)
-Se recomienda grabar un breve recorrido mostrando:
-1. Cómo se ingresan datos válidos e inválidos.
-2. Cómo se cargan los países desde la API externa.
-3. Cómo se guardan y visualizan los datos en MongoDB.
-
 🧾 Conclusión
+--
 GestorHeroesMundo combina integración con APIs externas, validaciones robustas y una interfaz clara y funcional. 
 Su diseño modular y escalable lo convierte en una base sólida para proyectos educativos o profesionales de gestión web y procesamiento de datos.
 
 👩‍💻 Autora
+--
 Celia Isabel Bensadón - Desarrolladora Fullstack MERN | Docente en Tecnología Educativa  
 
-## Última actualización
-- Corrección del módulo Países (layout2.ejs, dashboard2.ejs y controladores)
-- Estilos aplicados correctamente desde style2.css
-- Navegación funcional con EJS y Express
+
 
 
