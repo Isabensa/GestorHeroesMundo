@@ -1,10 +1,16 @@
 import express from 'express';
 import expressLayouts from 'express-ejs-layouts';
+import dotenv from 'dotenv'; // ✅ Cargar variables de entorno
 import { connectDB } from './config/dbConfig.mjs';
 import superHeroRoutes from './routes/superHeroRoutes.mjs';
 import countryRoutes from './routes/countryRoutes.mjs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
+// ================================
+// CONFIGURACIÓN DE VARIABLES DE ENTORNO
+// ================================
+dotenv.config(); // ✅ Esto habilita process.env.MONGO_URI y process.env.PORT
 
 // ================================
 // CONFIGURACIÓN DE RUTAS Y PATH
@@ -60,15 +66,15 @@ app.use((req, res, next) => {
 // RUTAS PRINCIPALES
 // ================================
 
-// 🏠 Página inicial con acceso a ambos módulos
+// 🏠 Página inicial
 app.get('/', (req, res) => {
   res.render('pages/index', { title: 'Gestor Héroes Mundo' });
 });
 
-// 🦸‍♂️ Módulo Superhéroes
+// 🦸‍♂️ Superhéroes
 app.use('/superheroes', superHeroRoutes);
 
-// 🌍 Módulo Países
+// 🌍 Países
 app.use('/paises', countryRoutes);
 
 // ================================
@@ -76,7 +82,7 @@ app.use('/paises', countryRoutes);
 // ================================
 app.use((req, res) => {
   res.status(404).render('pages/404', {
-    layout: 'layouts/layout', // ✅ evita error "layout is not defined"
+    layout: 'layouts/layout',
     title: 'Página no encontrada',
     mensaje: 'La ruta solicitada no existe en el sistema.',
   });
@@ -86,5 +92,5 @@ app.use((req, res) => {
 // INICIO DEL SERVIDOR
 // ================================
 app.listen(PORT, () => {
-  console.log(`Servidor escuchando en el puerto ${PORT}`);
+  console.log(`🚀 Servidor escuchando en el puerto ${PORT}`);
 });
