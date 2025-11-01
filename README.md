@@ -2,6 +2,7 @@ GestorHeroesMundo: Documentación del Proyecto
 
 Aplicación web fullstack desarrollada con Node.js, Express y MongoDB, que permite la gestión de superhéroes y países, integrando información obtenida de APIs externas. 
 El sistema aplica un enfoque modular y escalable basado en el patrón MVC (Modelo–Vista–Controlador).
+![Vista previa del proyecto](src/public/vistaprevia.png)
 
 🎯 Objetivos del Proyecto
 El objetivo principal de este proyecto es desarrollar una aplicación web robusta que:
