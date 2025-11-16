@@ -2,11 +2,7 @@ import { validationResult } from "express-validator";
 
 /**
  * Middleware para manejar errores de validación de express-validator.
- * Detecta si se espera un JSON o una vista y responde en consecuencia.
- *
- * @param {Object} req - Objeto de solicitud HTTP.
- * @param {Object} res - Objeto de respuesta HTTP.
- * @param {Function} next - Siguiente middleware o controlador.
+ * Detecta si la solicitud espera JSON o una vista, y responde adecuadamente.
  */
 export const validationHandler = (req, res, next) => {
   const errors = validationResult(req);
@@ -18,22 +14,32 @@ export const validationHandler = (req, res, next) => {
       value: error.value,
     }));
 
+    // ✔ Si espera JSON
     if (req.headers["accept"]?.includes("application/json")) {
-      // Si la solicitud espera un JSON
       return res.status(400).json({
         message: "Error en la validación de los datos enviados.",
         errors: errorDetails,
       });
-    } else {
-      // Si la solicitud espera una vista HTML
-      return res.status(400).render("pages/edit", {
-        title: "Editar Superhéroe",
-        superhero: null, // Si tienes datos previos, pásalos aquí
-        success: null,
-        error: errorDetails.map((e) => e.message).join(", "), // Muestra mensajes como texto
+    }
+
+    // ✔ Si la ruta pertenece a DELETE → usar page/delete
+    if (req.originalUrl.includes("/heroes/") && req.method === "POST") {
+      return res.status(400).render("pages/delete", {
+        title: "Eliminación de Superhéroe",
+        superhero: null,
+        successMessage: null,
+        error: errorDetails.map((e) => e.message).join(", "),
       });
     }
+
+    // ✔ Caso general (EDIT)
+    return res.status(400).render("pages/edit", {
+      title: "Editar Superhéroe",
+      superhero: null,
+      success: null,
+      error: errorDetails.map((e) => e.message).join(", "),
+    });
   }
 
-  next(); // Si no hay errores, pasa al siguiente middleware o controlador
+  next();
 };

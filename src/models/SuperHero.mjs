@@ -6,31 +6,43 @@ const superheroSchema = new mongoose.Schema({
   edad: { type: Number, min: 0 },
   planetaOrigen: { type: String, default: 'Desconocido', maxlength: 100 },
   debilidad: { type: String, maxlength: 100 },
+
   poderes: {
     type: [String],
     validate: {
-      validator: (arr) => arr.every(item => item.trim().length >= 3 && item.trim().length <= 60),
+      validator: (arr) =>
+        Array.isArray(arr) &&
+        arr.every(item => item.trim().length >= 3 && item.trim().length <= 60),
       message: 'Cada poder debe tener entre 3 y 60 caracteres.',
     },
+    default: []
   },
+
   aliados: {
     type: [String],
     validate: {
-      validator: (arr) => arr.every(item => item.trim().length >= 3 && item.trim().length <= 60),
+      validator: (arr) =>
+        Array.isArray(arr) &&
+        arr.every(item => item.trim().length >= 3 && item.trim().length <= 60),
       message: 'Cada aliado debe tener entre 3 y 60 caracteres.',
     },
+    default: []
   },
+
   enemigos: {
     type: [String],
     validate: {
-      validator: (arr) => arr.every(item => item.trim().length >= 3 && item.trim().length <= 60),
+      validator: (arr) =>
+        Array.isArray(arr) &&
+        arr.every(item => item.trim().length >= 3 && item.trim().length <= 60),
       message: 'Cada enemigo debe tener entre 3 y 60 caracteres.',
     },
+    default: []
   },
+
   autor: { type: String, default: 'ISABENSA' },
   createdAt: { type: Date, default: Date.now },
 });
 
-// 🟢 Importante: Tercer parámetro define la colección real en la base nueva
+// Tercer parámetro: nombre de colección REAL
 export default mongoose.model('SuperHero', superheroSchema, 'Grupo-02');
-

@@ -2,10 +2,11 @@ import mongoose from 'mongoose';
 import SuperHero from '../models/SuperHero.mjs';
 import IRepository from './IRepository.mjs';
 
-// Definimos la clase SuperHeroRepository que extiende IRepository
+// ==================================================
+//  SUPERHERO REPOSITORY
+// ==================================================
 class SuperHeroRepository extends IRepository {
 
-  // Obtener un superhéroe por su ID
   async obtenerPorId(id) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new Error("ID no válido");
@@ -19,7 +20,6 @@ class SuperHeroRepository extends IRepository {
     }
   }
 
-  // Obtener todos los superhéroes
   async obtenerTodos() {
     try {
       return await SuperHero.find({});
@@ -29,9 +29,9 @@ class SuperHeroRepository extends IRepository {
     }
   }
 
-  // Buscar superhéroes por un atributo
   async buscarPorAtributo(atributo, valor) {
     const query = { [atributo]: new RegExp(valor, 'i') };
+
     try {
       return await SuperHero.find(query);
     } catch (error) {
@@ -40,7 +40,6 @@ class SuperHeroRepository extends IRepository {
     }
   }
 
-  // Obtener superhéroes mayores de 30 años
   async obtenerMayoresDe30() {
     try {
       return await SuperHero.find({
@@ -54,7 +53,6 @@ class SuperHeroRepository extends IRepository {
     }
   }
 
-  // Método para crear un nuevo superhéroe
   async crearSuperheroe(data) {
     try {
       const nuevoSuperheroe = new SuperHero(data);
@@ -65,28 +63,44 @@ class SuperHeroRepository extends IRepository {
     }
   }
 
-  // Método para actualizar un superhéroe
   async actualizarSuperheroe(id, data) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error("ID no válido");
+    }
+
     try {
-      const superheroeActualizado = await SuperHero.findByIdAndUpdate(id, data, { new: true });
+      const superheroeActualizado = await SuperHero.findByIdAndUpdate(
+        id,
+        data,
+        { new: true }
+      );
+
       if (!superheroeActualizado) {
         throw new Error("Superhéroe no encontrado para actualizar");
       }
+
       return superheroeActualizado;
+
     } catch (error) {
       console.error(`Error al actualizar superhéroe con ID (${id}):`, error);
       throw error;
     }
   }
 
-  // Método para eliminar un superhéroe
   async eliminarSuperheroe(id) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error("ID no válido");
+    }
+
     try {
       const superheroeEliminado = await SuperHero.findByIdAndDelete(id);
+
       if (!superheroeEliminado) {
         throw new Error("Superhéroe no encontrado para eliminar");
       }
+
       return superheroeEliminado;
+
     } catch (error) {
       console.error(`Error al eliminar superhéroe con ID (${id}):`, error);
       throw error;
@@ -94,5 +108,5 @@ class SuperHeroRepository extends IRepository {
   }
 }
 
-// Exportar una instancia de la clase para usarla en otros módulos
+// Exportar instancia única
 export default new SuperHeroRepository();

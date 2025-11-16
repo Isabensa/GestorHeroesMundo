@@ -41,12 +41,22 @@
       <p><strong>Enemigos:</strong> <%= superhero.enemigos.join(', ') %></p>
     </div>
 
-    <form action="/superheroes/delete/<%= superhero._id %>/confirm" method="POST" class="delete-confirm-form">
-      <p class="confirm-message">¿Está seguro de que desea eliminar este superhéroe?</p>
+    <!-- FORMULARIO DE DELETE REAL -->
+    <form 
+      action="/superheroes/heroes/<%= superhero._id %>?_method=DELETE" 
+      method="POST" 
+      class="delete-confirm-form">
+
+      <p class="confirm-message">
+        ¿Está seguro de que desea eliminar este superhéroe?
+      </p>
+
       <div class="button-box">
         <button type="submit" class="confirm-button">Sí, eliminar</button>
         <a href="/superheroes/listado" class="cancel-button">Cancelar</a>
       </div>
+
     </form>
+
   <% } %>
 </div>

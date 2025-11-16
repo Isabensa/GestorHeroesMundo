@@ -1,6 +1,7 @@
 import express from 'express';
 import expressLayouts from 'express-ejs-layouts';
-import dotenv from 'dotenv'; // ✅ Cargar variables de entorno
+import dotenv from 'dotenv';
+import methodOverride from 'method-override';   // ✅ NECESARIO PARA DELETE REAL
 import { connectDB } from './config/dbConfig.mjs';
 import superHeroRoutes from './routes/superHeroRoutes.mjs';
 import countryRoutes from './routes/countryRoutes.mjs';
@@ -10,7 +11,7 @@ import { fileURLToPath } from 'url';
 // ================================
 // CONFIGURACIÓN DE VARIABLES DE ENTORNO
 // ================================
-dotenv.config(); // ✅ Esto habilita process.env.MONGO_URI y process.env.PORT
+dotenv.config();
 
 // ================================
 // CONFIGURACIÓN DE RUTAS Y PATH
@@ -32,30 +33,27 @@ connectDB();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Archivos estáticos (CSS, imágenes, etc.)
+// ✅ Habilitar PUT y DELETE desde formularios
+app.use(methodOverride('_method'));
+
+// Archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ✅ Configurar layouts globales
+// Layouts
 app.use(expressLayouts);
 
 // ================================
-// CONFIGURACIÓN DE MOTOR DE PLANTILLAS
+// MOTOR DE PLANTILLAS
 // ================================
-
-// Motor EJS
 app.set('view engine', 'ejs');
-
-// ✅ Se agregan ambas carpetas de vistas (para superhéroes y países)
 app.set('views', [
   path.join(__dirname, 'views'),
   path.join(__dirname, 'views2'),
 ]);
-
-// ✅ Layout por defecto (superhéroes usa layout.ejs)
 app.set('layout', 'layouts/layout');
 
 // ================================
-// LOG DE TODAS LAS SOLICITUDES
+// LOG DE SOLICITUDES
 // ================================
 app.use((req, res, next) => {
   console.log(`Solicitud recibida: ${req.method} ${req.url}`);
@@ -65,20 +63,18 @@ app.use((req, res, next) => {
 // ================================
 // RUTAS PRINCIPALES
 // ================================
-
-// 🏠 Página inicial
 app.get('/', (req, res) => {
   res.render('pages/index', { title: 'Gestor Héroes Mundo' });
 });
 
-// 🦸‍♂️ Superhéroes
+// Superhéroes
 app.use('/superheroes', superHeroRoutes);
 
-// 🌍 Países
+// Países
 app.use('/paises', countryRoutes);
 
 // ================================
-// MANEJO DE ERRORES (404)
+// MANEJO 404
 // ================================
 app.use((req, res) => {
   res.status(404).render('pages/404', {
